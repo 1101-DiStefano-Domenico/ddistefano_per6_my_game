@@ -6,6 +6,8 @@ from settings import *
 
 vec = pg.math.Vector2
 
+from random import randint
+
 # player class
 class Player(Sprite):
     def __init__(self):
@@ -33,15 +35,6 @@ class Player(Sprite):
         if keystate[pg.K_r]:
             self.pos = vec(WIDTH/2, HEIGHT/2)
 
-        # velocity cap
-        # if self.vel.x > 6:
-        #     self.vel.x = 6
-        # if self.vel.y > 6:
-        #     self.vel.y = 6
-        # if self.vel.x < -6:
-        #     self.vel.x = -6
-        # if self.vel.y < -6:
-        #     self.vel.y = -6
         
     # this is a method that will keep the sprite on screen
     def inbounds(self):
@@ -68,43 +61,37 @@ class Player(Sprite):
         self.pos += self.vel + 0.5 * self.acc
         self.rect.center = self.pos
 
-# mob class
 class Mob(Sprite):
-    def __init__(self,width,height):
+    def __init__(self,width,height, color):
         Sprite.__init__(self)
         self.width = width
         self.height = height
-        self.image = pg.Surface((self.width, self.height))
-        self.image.fill(RED)
+        self.image = pg.Surface((self.width,self.height))
+        self.color = color
+        self.image.fill(self.color)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, HEIGHT/2)
         self.pos = vec(WIDTH/2, HEIGHT/2)
-        self.vel = vec(0,0)
-        self.acc = vec(0,0)
-        self.cofric = 0.1
-
-    # this is a method that will keep the sprite on screen
+        self.vel = vec(randint(1,5),randint(1,5))
+        self.acc = vec(1,1)
+        self.cofric = 0.01
+    # ...
     def inbounds(self):
         if self.rect.x > WIDTH - self.width:
-            self.pos.x = WIDTH - self.width/2
-            self.vel.x = 0
+            self.vel.x *= -1
+            # self.acc = self.vel * -self.cofric
         if self.rect.x < 0:
-            self.pos.x = self.width/2
-            self.vel.x = 0
-        if self.rect.y > HEIGHT - self.height:
-            self.pos.y = HEIGHT - self.height/2
-            self.vel.y = 0
+            self.vel.x *= -1
+            # self.acc = self.vel * -self.cofric
         if self.rect.y < 0:
-            self.pos.y = self.height/2
-            self.vel.y = 0
-    def behavior(self):
-        # print(self.vel)
-        self.acc.x = -PLAYER_ACC
-        
+            self.vel.y *= -1
+            # self.acc = self.vel * -self.cofric
+        if self.rect.y > HEIGHT - self.height:
+            self.vel.y *= -1
+            # self.acc = self.vel * -self.cofric
     def update(self):
         self.inbounds()
-        self.acc = self.vel * MOB_FRICTION
-        self.vel += self.acc
-        self.behavior()
-        self.pos += self.vel + 0.5 * self.acc
+        # self.pos.x += self.vel.x
+        # self.pos.y += self.vel.y
+        self.pos += self.vel
         self.rect.center = self.pos
