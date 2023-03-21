@@ -63,7 +63,6 @@ for i in range(0,20):
 
 print(enemies)
 # game loop
-
 while RUNNING:
     # player.kill()
     #  keep loop running at the right speed
@@ -74,10 +73,25 @@ while RUNNING:
         if event.type == pg.QUIT:
             RUNNING = False
             # break
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_p and PAUSE == False:
+                PAUSE = True
+            else:
+                PAUSE = False
+
+
     # print(get_mouse_now())
     ### update section of game loop (if updates take longer the 1/30th of a second, you will get laaaaag...)
-    enemies.update()
-    all_sprites.update()
+    if not PAUSE:
+        enemies.update()
+        all_sprites.update()
+        screen.fill(BLUE)
+        all_sprites.draw(screen)
+        draw_text("Score: " + str(SCORE), 22, WHITE, WIDTH/2, HEIGHT/10)
+    if PAUSE:
+        screen.fill(BLACK)
+        draw_text("PAUSED", 50, WHITE, WIDTH/2, HEIGHT/2)
+ 
 
     # if player hits enemies
     blocks_hit_list = pg.sprite.spritecollide(player, enemies, True)
@@ -90,9 +104,7 @@ while RUNNING:
         pass
     
     ### draw and render section of game loop
-    screen.fill(BLUE)
-    all_sprites.draw(screen)
-    draw_text("Score: " + str(SCORE), 22, WHITE, WIDTH/2, HEIGHT/10)
+    
 
     # double buffering draws frames for entire screen
     pg.display.flip()

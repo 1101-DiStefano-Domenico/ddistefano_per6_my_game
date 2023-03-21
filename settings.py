@@ -11,3 +11,4 @@ RED = (255,50,50)
 FPS = 60
 RUNNING = True
 SCORE = 0
+PAUSE = False
