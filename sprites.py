@@ -10,10 +10,11 @@ from random import randint
 
 # player class
 class Player(Sprite):
-    def __init__(self):
+    def __init__(self, game):
         Sprite.__init__(self)
+        self.game = game
         self.image = pg.Surface((50,50))
-        self.image.fill(BLACK)
+        self.image.fill(WHITE)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, HEIGHT/2)
         self.pos = vec(WIDTH/2, HEIGHT/2)
@@ -26,6 +27,7 @@ class Player(Sprite):
 
         if keystate[pg.K_a]:
             self.acc.x = -PLAYER_ACC
+            # print("im inputing")
         if keystate[pg.K_d]:
             self.acc.x = PLAYER_ACC
         if keystate[pg.K_w]:
@@ -35,7 +37,9 @@ class Player(Sprite):
         if keystate[pg.K_r]:
             self.pos = vec(WIDTH/2, HEIGHT/2)
 
-        
+    def jump(self):
+        hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+
     # this is a method that will keep the sprite on screen
     def inbounds(self):
         width = 50
