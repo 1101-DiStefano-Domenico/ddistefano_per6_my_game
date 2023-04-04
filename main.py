@@ -1,5 +1,14 @@
 # File created by: Domenico DiStefano
+'''
+Game Structure:
+Goals, Rules, Feedback, Freedom
 
+My goal is:
+create projectiles sprite
+
+Reach Goal:
+
+'''
 # import libs
 import pygame as pg
 import os
@@ -23,18 +32,26 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
 
+    # method that adds sprites  
     def new(self):
         # starting a new game
-        self.score = 0
         self.all_sprites = pg.sprite.Group()
-        self.platforms = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
+        self.player1 = pg.sprite.Group()
         self.player = Player(self)
         self.all_sprites.add(self.player)
-        for i in range(0,10):
-            m = Mob(20,20,(0,255,0))
-            self.all_sprites.add(m)
-            self.enemies.add(m)
+        self.player1.add(self.player)
+        
+        self.bullet_list = pg.sprite.Group()
+
+        # self.projectile = Projectile(self)
+        # self.all_sprites.add(self.projectile)
+        
+        for i in range(0,5):
+            self.mob1 = Mob(self, self.player, 20, 20,(0,255,0))
+            self.all_sprites.add(self.mob1)
+            self.enemies.add(self.mob1)
+            
         self.run()
 
     def run(self):
@@ -53,14 +70,27 @@ class Game:
                 self.running = False
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    self.player.jump()
+                    bullet = Projectile(self, self.enemies)
+                    bullet.rect.x = self.player.pos.x 
+                    bullet.rect.y = self.player.pos.y -50
+                    self.all_sprites.add(bullet)
+                    self.bullet_list.add(bullet)
+                    print("click")
     
     def update(self):
         self.all_sprites.update()
+        
     def draw(self):
-        self.screen.fill(BLACK)
-        self.all_sprites.draw(self.screen)
+        if self.player.hp >= 0:
+            self.screen.fill(BLACK)
+            self.all_sprites.draw(self.screen)
+            self.draw_text("HP: " + str(self.player.hp), 30,WHITE, 720, HEIGHT/32)
+        else:
+            self.screen.fill(BLACK)
+            self.draw_text("YOU LOSE", 80, WHITE, WIDTH/2, 250)
+            self.draw_text("PLAY AGAIN? (R)", 30, WHITE, WIDTH/2, 350)
         pg.display.flip()
+    
     def draw_text(self, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -71,15 +101,11 @@ class Game:
     def get_mouse_now(self):
         x,y = pg.mouse.get_pos()
         return (x,y)
+    
 
+# instantiate the game class...
 g = Game()
+# kick off the game loop
 while g.running:
     g.new()
-
 pg.quit()
-
-# if event.type == pg.KEYDOWN:
-#             if event.key == pg.K_p and PAUSE == False:
-#                 PAUSE = True
-#             else:
-#                 PAUSE = False
