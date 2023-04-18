@@ -3,6 +3,7 @@ from pygame.sprite import Sprite
 from settings import *
 from random import randint
 import math
+import datetime
 
 
 vec = pg.math.Vector2
@@ -36,12 +37,7 @@ class Player(Sprite):
             self.acc.y = -PLAYER_ACC
         if keystate[pg.K_s]:
             self.acc.y = PLAYER_ACC
-        if keystate[pg.K_r]:
-            self.pos = vec(WIDTH/2, HEIGHT/2)
-            self.hp = 100
         
-            
-
     # this is a method that will keep the sprite on screen
     def inbounds(self):
         width = 50
@@ -91,8 +87,8 @@ class Mob(Sprite):
         self.image.fill(self.color)
         self.rect = self.image.get_rect()
         # randomizes starting position and velocity
-        self.rect.center = vec(randint(0, WIDTH), randint(0,HEIGHT))
-        self.pos = vec(randint(0,50),randint(0,50))
+        # self.rect.center = vec(randint(0, WIDTH), randint(0,HEIGHT))
+        self.pos = vec(randint(0,WIDTH),randint(0,50))
         self.vel = vec(randint(1,5),randint(1,5))
         self.acc = vec(1,1)
         self.cofric = 0.1

@@ -5,9 +5,6 @@ Goals, Rules, Feedback, Freedom
 
 My goal is:
 create projectiles sprite
-
-Reach Goal:
-
 '''
 # import libs
 import pygame as pg
@@ -31,6 +28,7 @@ class Game:
         pg.display.set_caption("My Game (●'◡'●)")
         self.clock = pg.time.Clock()
         self.running = True
+        self.startgame = False
 
     # method that adds sprites  
     def new(self):
@@ -77,6 +75,11 @@ class Game:
                     bullet.rect.y = self.player.pos.y -50
                     self.all_sprites.add(bullet)
                     self.bullet_list.add(bullet)
+                if event.key == pg.K_r:
+                    self.playing = False
+                if event.key == pg.K_p:
+                    self.startgame = True
+                    self.playing = False
     
     # method that updates the game at 1/60th of a second
     def update(self):
@@ -92,6 +95,9 @@ class Game:
                 self.player.score += 1
                 
                 # adds a new enemy after one dies
+                # self.all_sprites.add(self.mob1)
+                # self.enemies.add(self.mob1)
+                self.mob1 = Mob(self, self.player, 20, 20,(0,255,0))
                 self.all_sprites.add(self.mob1)
                 self.enemies.add(self.mob1)
             if bullet.pos.y > HEIGHT:
@@ -110,15 +116,22 @@ class Game:
  
     # method for displaying the game and displaying end screen when player hp = 0
     def draw(self):
-        if self.player.hp > 0:
+        if not self.startgame:
             self.screen.fill(BLACK)
-            self.all_sprites.draw(self.screen)
-            self.draw_text("HP: " + str(self.player.hp), 30,WHITE, 720, HEIGHT/32)
-            self.draw_text("ELIMINATIONS: " + str(self.player.score), 30,WHITE, 120, HEIGHT/32)
+            self.draw_text("ALIEN SWARM", 80, WHITE, WIDTH/2, 250)
+            self.draw_text("PRESS P TO PLAY", 30, WHITE, WIDTH/2, 350)
         else:
-            self.screen.fill(BLACK)
-            self.draw_text("YOU LOSE", 80, WHITE, WIDTH/2, 250)
-            self.draw_text("PLAY AGAIN? (R)", 30, WHITE, WIDTH/2, 350)
+            if self.player.hp > 0:
+                self.screen.fill(BLACK)
+                self.all_sprites.draw(self.screen)
+                self.draw_text("HP: " + str(self.player.hp), 30,WHITE, 1100, HEIGHT/32)
+                self.draw_text("ELIMINATIONS: " + str(self.player.score), 30,WHITE, 120, HEIGHT/32)
+            else:
+                self.screen.fill(BLACK)
+                self.draw_text("YOU DIED", 80, WHITE, WIDTH/2, 250)
+                self.draw_text("RESTART? (R)", 30, WHITE, WIDTH/2, 400)
+                self.draw_text("SCORE: " + str(self.player.score), 30, WHITE, WIDTH/2, 350)
+        
         pg.display.flip()
     
     # method for drawing text
