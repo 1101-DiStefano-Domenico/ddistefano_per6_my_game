@@ -78,6 +78,7 @@ class Mob(Sprite):
     # parameters for mob class
     def __init__(self, game, player, width, height, color):
         Sprite.__init__(self)
+        # allows us to use the player and game's parameters inside for the mob (used in the inbounds method)
         self.player = player
         self.game = game
         self.width = width
@@ -87,12 +88,11 @@ class Mob(Sprite):
         self.image.fill(self.color)
         self.rect = self.image.get_rect()
         # randomizes starting position and velocity
-        # self.rect.center = vec(randint(0, WIDTH), randint(0,HEIGHT))
         self.pos = vec(randint(0,WIDTH),randint(0,50))
         self.vel = vec(randint(1,5),randint(1,5))
         self.acc = vec(1,1)
         self.cofric = 0.1
-        self.enemyspeed = .2
+        self.enemyspeed = .1
         
     # keeps mob inbounds adjusting it to its own width that is determined when an instance of the class is created
     def inbounds(self):
@@ -138,9 +138,11 @@ class Mob(Sprite):
 # class for projectiles
 class Projectile(Sprite):
     def __init__(self, game, enemies, player):
-        # allows me to call methods from the parent class
+        # allows me to call methods from the parent class and returns a temporary object
+        # parent class is the class that the class is being inherited from
         super().__init__()
 
+        # allows the projectile class to make use of the parameters of other classes
         self.game = game
         self.enemies = enemies
         self.player = player

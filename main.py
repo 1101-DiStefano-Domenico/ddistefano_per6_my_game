@@ -95,11 +95,11 @@ class Game:
                 self.player.score += 1
                 
                 # adds a new enemy after one dies
-                # self.all_sprites.add(self.mob1)
-                # self.enemies.add(self.mob1)
                 self.mob1 = Mob(self, self.player, 20, 20,(0,255,0))
                 self.all_sprites.add(self.mob1)
                 self.enemies.add(self.mob1)
+                self.mob1.enemyspeed += 0.01 
+                self.player.hp += 5
             if bullet.pos.y > HEIGHT:
                 self.bullet_list.remove(bullet)
                 self.all_sprites.remove(bullet)
@@ -119,7 +119,10 @@ class Game:
         if not self.startgame:
             self.screen.fill(BLACK)
             self.draw_text("ALIEN SWARM", 80, WHITE, WIDTH/2, 250)
-            self.draw_text("PRESS P TO PLAY", 30, WHITE, WIDTH/2, 350)
+            self.draw_text("PRESS P TO PLAY", 40, WHITE, WIDTH/2, 330)
+            self.draw_text("WASD to move", 30, WHITE, WIDTH/2, 420)
+            self.draw_text("SPACE to shoot", 30, WHITE, WIDTH/2, 450)
+            self.draw_text("KILL THE ALIENS TO REGAIN HP", 25, WHITE, WIDTH/2, 485)
         else:
             if self.player.hp > 0:
                 self.screen.fill(BLACK)
@@ -131,6 +134,8 @@ class Game:
                 self.draw_text("YOU DIED", 80, WHITE, WIDTH/2, 250)
                 self.draw_text("RESTART? (R)", 30, WHITE, WIDTH/2, 400)
                 self.draw_text("SCORE: " + str(self.player.score), 30, WHITE, WIDTH/2, 350)
+                # removes all sprites to stop any updates while not visible
+                self.all_sprites.empty()
         
         pg.display.flip()
     
@@ -144,9 +149,9 @@ class Game:
         self.screen.blit(text_surface, text_rect)
     
 
-# instantiate the game class...
+# instantiate the game class
 g = Game()
-# kick off the game loop
+# starts the game loop
 while g.running:
     g.new()
 pg.quit()
