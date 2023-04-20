@@ -3,8 +3,11 @@
 Game Structure:
 Goals, Rules, Feedback, Freedom
 
-My goal is:
-create projectiles sprite
+
+Goal 1: create projectiles sprite
+Goal 2: create score & healthbar
+Goal 3: create start & end screen
+Goal 4: make it replayable
 '''
 # import libs
 import pygame as pg
@@ -25,7 +28,7 @@ class Game:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption("My Game (●'◡'●)")
+        pg.display.set_caption("ALIEN SWARM (⌐■_■)")
         self.clock = pg.time.Clock()
         self.running = True
         self.startgame = False
@@ -75,8 +78,6 @@ class Game:
                     bullet.rect.y = self.player.pos.y -50
                     self.all_sprites.add(bullet)
                     self.bullet_list.add(bullet)
-                if event.key == pg.K_r:
-                    self.playing = False
                 if event.key == pg.K_p:
                     self.startgame = True
                     self.playing = False
@@ -87,8 +88,7 @@ class Game:
         for bullet in self.bullet_list:
         # See if it hit a block
             self.enemy_hit_list = pg.sprite.spritecollide(bullet, self.enemies, True)
-        # For each enemy hit, remove the bullet and add to the score
-        # also has parameters for removing bullet if its position exceeds the width or height of the screen
+            # For each enemy hit, remove the bullet and add to the score
             for block in self.enemy_hit_list:
                 self.bullet_list.remove(bullet)
                 self.all_sprites.remove(bullet)
@@ -98,8 +98,12 @@ class Game:
                 self.mob1 = Mob(self, self.player, 20, 20,(0,255,0))
                 self.all_sprites.add(self.mob1)
                 self.enemies.add(self.mob1)
+
+                # makes mobs path better as you kill them and replenish hp on kill
                 self.mob1.enemyspeed += 0.01 
                 self.player.hp += 5
+
+            # removes bullet if it exceeds a certain height or width
             if bullet.pos.y > HEIGHT:
                 self.bullet_list.remove(bullet)
                 self.all_sprites.remove(bullet)
@@ -116,6 +120,7 @@ class Game:
  
     # method for displaying the game and displaying end screen when player hp = 0
     def draw(self):
+        # start screen
         if not self.startgame:
             self.screen.fill(BLACK)
             self.draw_text("ALIEN SWARM", 100, GREEN, WIDTH/2, 250)
@@ -124,11 +129,13 @@ class Game:
             self.draw_text("SPACE to shoot", 30, WHITE, WIDTH/2, 450)
             self.draw_text("KILL THE ALIENS TO REGAIN HP", 25, WHITE, WIDTH/2, 480)
         else:
+            # main game screen
             if self.player.hp > 0:
                 self.screen.fill(BLACK)
                 self.all_sprites.draw(self.screen)
                 self.draw_text("HP: " + str(self.player.hp), 30,WHITE, 1100, HEIGHT/32)
                 self.draw_text("ELIMINATIONS: " + str(self.player.score), 30,WHITE, 120, HEIGHT/32)
+            # end screen
             else:
                 self.screen.fill(BLACK)
                 self.draw_text("YOU DIED", 100, RED, WIDTH/2, 250)
