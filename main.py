@@ -43,7 +43,7 @@ class Game:
         
         # makes range of mobs and adds them to all sprites group
         for i in range(0,10):
-            self.mob1 = Mob(self, self.player, 20, 20,(0,255,0))
+            self.mob1 = Mob(self, self.player, 20, 20,GREEN)
             self.all_sprites.add(self.mob1)
             self.enemies.add(self.mob1)
         
@@ -118,11 +118,11 @@ class Game:
     def draw(self):
         if not self.startgame:
             self.screen.fill(BLACK)
-            self.draw_text("ALIEN SWARM", 80, WHITE, WIDTH/2, 250)
+            self.draw_text("ALIEN SWARM", 100, GREEN, WIDTH/2, 250)
             self.draw_text("PRESS P TO PLAY", 40, WHITE, WIDTH/2, 330)
             self.draw_text("WASD to move", 30, WHITE, WIDTH/2, 420)
             self.draw_text("SPACE to shoot", 30, WHITE, WIDTH/2, 450)
-            self.draw_text("KILL THE ALIENS TO REGAIN HP", 25, WHITE, WIDTH/2, 485)
+            self.draw_text("KILL THE ALIENS TO REGAIN HP", 25, WHITE, WIDTH/2, 480)
         else:
             if self.player.hp > 0:
                 self.screen.fill(BLACK)
@@ -131,9 +131,9 @@ class Game:
                 self.draw_text("ELIMINATIONS: " + str(self.player.score), 30,WHITE, 120, HEIGHT/32)
             else:
                 self.screen.fill(BLACK)
-                self.draw_text("YOU DIED", 80, WHITE, WIDTH/2, 250)
-                self.draw_text("RESTART? (R)", 30, WHITE, WIDTH/2, 400)
-                self.draw_text("SCORE: " + str(self.player.score), 30, WHITE, WIDTH/2, 350)
+                self.draw_text("YOU DIED", 100, RED, WIDTH/2, 250)
+                self.draw_text("PLAY AGAIN? (P)", 30, WHITE, WIDTH/2, 400)
+                self.draw_text("ELIMINATIONS: " + str(self.player.score), 30, WHITE, WIDTH/2, 350)
                 # removes all sprites to stop any updates while not visible
                 self.all_sprites.empty()
         
@@ -141,7 +141,7 @@ class Game:
     
     # method for drawing text
     def draw_text(self, text, size, color, x, y):
-        font_name = pg.font.match_font('arial')
+        font_name = pg.font.match_font('Monaco')
         font = pg.font.Font(font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
